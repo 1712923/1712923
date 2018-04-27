@@ -123,8 +123,6 @@ void DocThongTin(FILE* FileIn, SinhVien DS[], int &BatDau)
 		fgetws(DS-> KhoaHoc, a, FileIn);
 		b = ftell(FileIn) + 1;
 	}
-	
-
 
 	fseek(FileIn, b + 1, SEEK_SET);
 	if (fgetwc(FileIn) != L'"')
@@ -146,8 +144,6 @@ void DocThongTin(FILE* FileIn, SinhVien DS[], int &BatDau)
 		b = ftell(FileIn) + 1;
 	}
 	
-
-
 	fseek(FileIn, b + 1, SEEK_SET);
 	if (fgetwc(FileIn) != L'"')
 	{
@@ -241,20 +237,20 @@ int dodai(wchar_t* s)
 	return i;
 }
 
-void saochepchuoi(wchar_t* str, wchar_t* s)
+void CopyChuoi(wchar_t* str, wchar_t* s)
 {
 	int a = dodai(s);
 	for (int i = 0; i < a; i++)
 	{
 		str[i] = s[i];
 	}
-	str[a] = '\0';
+	str[a] = NULL ;
 }
-void ghepchuoi(wchar_t* str, wchar_t* s)
+void GhepChuoi(wchar_t* str, wchar_t* s)
 {
 	int a = dodai(str);
-	int m = dodai(str) + dodai(s);
-	for (int i = 0; i < m; i++)
+	int b = dodai(str) + dodai(s);
+	for (int i = 0; i < b; i++)
 	{
 		if (i == a)
 		{
@@ -265,109 +261,96 @@ void ghepchuoi(wchar_t* str, wchar_t* s)
 			}
 		}
 	}
-	str[m] = '\0';
+	str[b] = NULL;
 }
-void ghifile(SinhVien* DS);
-void ghifile(SinhVien* DS)
+void GhiFile(SinhVien* DS);
+void GhiFile(SinhVien* DS)
 {
-	wchar_t filename[50];
-	saochepchuoi(filename, DS-> MSSV);
-	ghepchuoi(filename, L".html");
+	wchar_t fp[100];
+	CopyChuoi(fp, DS-> MSSV);
+	GhepChuoi(fp, L".html");
 	FILE* f;
-	_wfopen_s(&f, filename, L"wt,ccs=UTF-8");
+	_wfopen_s(&f, fp, L"wt,ccs=UTF-8");
 	_setmode(_fileno(f), _O_U8TEXT);
 	if (f == NULL)
 	{
-		wprintf(L"Tạo file lỗi!!!\n");
+		wprintf(L"Không Thể Tạo File\n");
 	}
 	else
 	{
 		fwprintf(f, L"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n");
 		fwprintf(f, L"<html xmlns=\"http://www.w3.org/1999/xhtml\">\n");
-		fwprintf(f, L"	<head>\n");
-		fwprintf(f, L"		<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n");
-		fwprintf(f, L"		<link rel=\"stylesheet\" type=\"text/css\" href=\"personal.css\" />\n");
-		fwprintf(f, L"		<title>HCMUS - %ls</title>\n", DS-> HoTen);
-		fwprintf(f, L"	</head>\n");
-		fwprintf(f, L"	<body>\n");
-		fwprintf(f, L"		<div class=\"Layout_container\">\n");
-		fwprintf(f, L"			<!-- Begin Layout Banner Region -->\n");
-		fwprintf(f, L"			<div class=\"Layout_Banner\" >\n");
-		fwprintf(f, L"				<div><img id=\"logo\" src=\"Images/logo.jpg\" height=\"105\" /></div>\n");
-		fwprintf(f, L"				<div class=\"Header_Title\">TRƯỜNG ÐẠI HỌC KHOA HỌC TỰ NHIÊN</div>\n");
-		fwprintf(f, L"			</div>\n");
-		fwprintf(f, L"			<!-- End Layout Banner Region -->\n");
-		fwprintf(f, L"			<!-- Begin Layout MainContents Region -->\n");
-		fwprintf(f, L"			<div class=\"Layout_MainContents\">\n");
-		fwprintf(f, L"				<!-- Begin Below Banner Region -->\n");
-		fwprintf(f, L"				<div class=\"Personal_Main_Information\">\n");
-		fwprintf(f, L"					<!-- Begin Thông tin cá nhân của sinh viên ------------------------------------------------------------------------------------------->\n");
-		fwprintf(f, L"					<div class=\"Personal_Location\"> \n");
-		fwprintf(f, L"						<img src=\"Images/LogoFooter.jpg\" width=\"27\" height=\"33\" />\n");
-		fwprintf(f, L"						<span class=\"Personal_FullName\">%ls - %ls</span>\n", DS-> HoTen, DS-> MSSV);
-		fwprintf(f, L"						<div class=\"Personal_Department\">%ls</div>\n", DS-> khoa);
-		fwprintf(f, L"						<br />\n");
-		fwprintf(f, L"						<div class=\"Personal_Phone\">\n");
-		fwprintf(f, L"						Email: \n");
-		fwprintf(f, L"						</div>\n");
-		fwprintf(f, L"						<br />\n");
-		fwprintf(f, L"						<br />\n");
-		fwprintf(f, L"					</div>\n");
-		fwprintf(f, L"					<!-- End Thông tin cá nhân của sinh viên ------------------------------------------------------------------------------------------->\n");
-		fwprintf(f, L"					<div class=\"Personal_HinhAnhKhung\">\n");
-		fwprintf(f, L"						<img src=\"Images/%ls\" class=\"Personal_HinhAnh\" />\n", DS-> HinhAnh);
-		fwprintf(f, L"					</div>\n");
-		fwprintf(f, L"				</div>\n");
-		fwprintf(f, L"				<!-- End Below Banner Region -->\n");
-		fwprintf(f, L"				<!-- Begin MainContents Region -->\n");
-		fwprintf(f, L"				<div class=\"MainContain\">\n");
-		fwprintf(f, L"\n");
-		fwprintf(f, L"					<!-- Begin Top Region -->\n");
-		fwprintf(f, L"					<div class=\"MainContain_Top\">\n");
-		fwprintf(f, L"\n");
-		fwprintf(f, L"						<div class=\"InfoGroup\">Thông tin cá nhân</div>\n");
-		fwprintf(f, L"                       <div>\n");
-		fwprintf(f, L"                            <ul class=\"TextInList\">\n");
-		fwprintf(f, L"                              <li>Họ và tên: %ls </li>\n", DS-> HoTen);
-		fwprintf(f, L"								 <li>MSSV: %ls </li>\n", DS-> MSSV);
-		fwprintf(f, L"								 <li>Sinh viên khoa: %ls </li>\n", DS-> khoa);
-		fwprintf(f, L"								 <li>Khóa Học: %ls </li>\n", DS-> KhoaHoc);
-		fwprintf(f, L"								 <li>Ngày sinh: %ls </li>\n", DS-> NgaySinh);
-		fwprintf(f, L"							 </ul>\n");
-		fwprintf(f, L"						</div>\n");
-		fwprintf(f, L"                       <div class=\"InfoGroup\">Sở thích</div>\n");
-		fwprintf(f, L"                       <div>\n");
-		fwprintf(f, L"                            <ul class=\"TextInList\">\n");
-		fwprintf(f, L"                              <li>%ls</li>\n", DS-> SoThich);
-		fwprintf(f, L"							 </ul>\n");
-		fwprintf(f, L"						</div>\n");
-		fwprintf(f, L"						<div class=\"InfoGroup\">Mô tả bản thân</div>\n");
-		fwprintf(f, L"						<div>\n");
-		fwprintf(f, L"							<ul class=\"Description\">\n");
-		fwprintf(f, L"                            <li>%ls</li>\n", DS-> MoTaBanThan);
-		fwprintf(f, L"							</ul>\n");
-		fwprintf(f, L"						</div>\n");
-		fwprintf(f, L"\n");
-		fwprintf(f, L"					</div>\n");
-		fwprintf(f, L"				</div>\n");
-		fwprintf(f, L"			</div>\n");
-		fwprintf(f, L"\n");
-		fwprintf(f, L"			<!-- Begin Layout Footer -->\n");
-		fwprintf(f, L"			<div class=\"Layout_Footer\">\n");
-		fwprintf(f, L"				<div class=\"divCopyright\">\n");
-		fwprintf(f, L"					<br />\n");
-		fwprintf(f, L"					<img src=\"Images/LogoFooter_gray.jpg\" width=\"34\" height=\"41\" /><br />\n");
-		fwprintf(f, L"					<br />\n");
-		fwprintf(f, L"				@2018</br>\n");
-		fwprintf(f, L"				Ðồ án giữa kì</br>\n");
-		fwprintf(f, L"				Kĩ thuật lập trình</br>\n");
-		fwprintf(f, L"				TH2018/04</br>\n");
-		fwprintf(f, L"				1712923 - Phạm Lê Hoài Vũ</br>\n");
-		fwprintf(f, L"				</div>\n");
-		fwprintf(f, L"			</div>\n");
-		fwprintf(f, L"			<!-- End Layout Footer -->\n");
-		fwprintf(f, L"		</div>\n");
-		fwprintf(f, L"	</body>\n");
+		fwprintf(f, L"<head>\n");
+		fwprintf(f, L"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n");
+		fwprintf(f, L"<link rel=\"stylesheet\" type=\"text/css\" href=\"personal.css\" />\n");
+		fwprintf(f, L"<title>HCMUS - %ls</title>\n", DS-> HoTen);
+		fwprintf(f, L"</head>\n");
+		fwprintf(f, L"<body>\n");
+		fwprintf(f, L"<div class=\"Layout_container\">\n");
+		fwprintf(f, L"<!-- Begin Layout Banner Region -->\n");
+		fwprintf(f, L"<div class=\"Layout_Banner\" >\n");
+		fwprintf(f, L"<div><img id=\"logo\" src=\"Images/logo.jpg\" height=\"105\" /></div>\n");
+		fwprintf(f, L"<div class=\"Header_Title\">TRƯỜNG ÐẠI HỌC KHOA HỌC TỰ NHIÊN</div>\n");
+		fwprintf(f, L"</div>\n");
+		fwprintf(f, L"<div class=\"Layout_MainContents\">\n");
+		fwprintf(f, L"<div class=\"Personal_Main_Information\">\n");
+		fwprintf(f, L"<div class=\"Personal_Location\"> \n");
+		fwprintf(f, L"<img src=\"Images/LogoFooter.jpg\" width=\"27\" height=\"33\" />\n");
+		fwprintf(f, L"<span class=\"Personal_FullName\">%ls - %ls</span>\n", DS-> HoTen, DS-> MSSV);
+		fwprintf(f, L"<div class=\"Personal_Department\">%ls</div>\n", DS-> khoa);
+		fwprintf(f, L"<br />\n");
+		fwprintf(f, L"<div class=\"Personal_Phone\">\n");
+		fwprintf(f, L"</div>\n");
+		fwprintf(f, L"<br />\n");
+		fwprintf(f, L"<br />\n");
+		fwprintf(f, L"</div>\n");
+		fwprintf(f, L"<div class=\"Personal_HinhAnhKhung\">\n");
+		fwprintf(f, L"<img src=\"Images/%ls\" class=\"Personal_HinhAnh\" />\n", DS-> HinhAnh);
+		fwprintf(f, L"</div>\n");
+		fwprintf(f, L"</div>\n");
+		fwprintf(f, L"<div class=\"MainContain\">\n\n");
+		fwprintf(f, L"<div class=\"MainContain_Top\">\n\n");
+		fwprintf(f, L"<div class=\"InfoGroup\">Thông tin cá nhân</div>\n");
+		fwprintf(f, L"<div>\n");
+		fwprintf(f, L"<ul class=\"TextInList\">\n");
+		fwprintf(f, L"<li>Họ và tên: %ls </li>\n", DS-> HoTen);
+		fwprintf(f, L"<li>MSSV: %ls </li>\n", DS-> MSSV);
+		fwprintf(f, L"<li>Sinh viên khoa: %ls </li>\n", DS-> khoa);
+		fwprintf(f, L"<li>Khóa Học: %ls </li>\n", DS-> KhoaHoc);
+		fwprintf(f, L"<li>Ngày sinh: %ls </li>\n", DS-> NgaySinh);
+		fwprintf(f, L"</ul>\n");
+		fwprintf(f, L"</div>\n");
+		fwprintf(f, L"<div class=\"InfoGroup\">Sở thích</div>\n");
+		fwprintf(f, L"<div>\n");
+		fwprintf(f, L"<ul class=\"TextInList\">\n");
+		fwprintf(f, L"<li>%ls</li>\n", DS-> SoThich);
+		fwprintf(f, L"</ul>\n");
+		fwprintf(f, L"</div>\n");
+		fwprintf(f, L"<div class=\"InfoGroup\">Mô tả bản thân</div>\n");
+		fwprintf(f, L"<div>\n");
+		fwprintf(f, L"<ul class=\"Description\">\n");
+		fwprintf(f, L"<li>%ls</li>\n", DS-> MoTaBanThan);
+		fwprintf(f, L"</ul>\n");
+		fwprintf(f, L"</div>\n\n");
+		fwprintf(f, L"</div>\n");
+		fwprintf(f, L"</div>\n");
+		fwprintf(f, L"</div>\n");
+		fwprintf(f, L"<!-- Begin Layout Footer -->\n");
+		fwprintf(f, L"<div class=\"Layout_Footer\">\n");
+		fwprintf(f, L"<div class=\"divCopyright\">\n");
+		fwprintf(f, L"<br />\n");
+		fwprintf(f, L"<img src=\"Images/LogoFooter_gray.jpg\" width=\"34\" height=\"41\" /><br />\n");
+		fwprintf(f, L"<br />\n");
+		fwprintf(f, L"@2018</br>\n");
+		fwprintf(f, L"Ðồ án giữa kì</br>\n");
+		fwprintf(f, L"Kĩ thuật lập trình</br>\n");
+		fwprintf(f, L"TH2018/04</br>\n");
+		fwprintf(f, L"1712923 - Phạm Lê Hoài Vũ</br>\n");
+		fwprintf(f, L"</div>\n");
+		fwprintf(f, L"</div>\n");
+		fwprintf(f, L"<!-- End Layout Footer -->\n");
+		fwprintf(f, L"</div>\n");
+		fwprintf(f, L"</body>\n");
 		fwprintf(f, L"</html>");
 		fclose(f);
 	}
@@ -379,12 +362,12 @@ void main()
 	fopen_s(&FileIn, "SV.csv", "r, ccs=UTF-8");
 	if (FileIn == NULL)
 	{
-		wprintf(L"FILE khong the mo\n");
+		wprintf(L"Khong the mo File\n");
 	}
 	else
 	{
-		int n = 0, BatDau = 3;
 		SinhVien* DS;
+		int n = 0, BatDau = 3;
 		while (!feof(FileIn))
 		{
 			if (fgetwc(FileIn) == L'\n')
@@ -392,15 +375,14 @@ void main()
 				n++;
 			}
 		}
-		DS = (SinhVien*)malloc(sizeof(SinhVien)* n);
+		DS = (SinhVien*)malloc(n*sizeof(SinhVien));
 		for (int i = 0; i <n; i++)
 		{
 			DocThongTin(FileIn, &DS[i], BatDau);
-			ghifile(&DS[i]);
+			GhiFile(&DS[i]);
 
 		}
 		free(DS);
 		fclose(FileIn);
-
 	}
 }
